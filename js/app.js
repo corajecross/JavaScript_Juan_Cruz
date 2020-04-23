@@ -245,8 +245,8 @@ function Calculadora(op,num1,num2){
 }
 //Función para imprimir en el display
 function impDisplay(num){
-    if(num.length >= 8){
-        var numImp = num.slice(0,8);
+    if(num.length > 8){
+        var numImp = num.substr(0,7);
         display.innerHTML = numImp;
     }
     else{
