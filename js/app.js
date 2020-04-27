@@ -1,14 +1,15 @@
 //Objeto Calculadora
 var Calculadora = { 
-    init: (function(){
-        this.eventosTeclado();
-    }),
     //Display de la calculadora
     display: document.getElementById('display'),
     //Numero en display
     valorDisplay: '0',
-    //Teclado Numérico
+    init: (function(){
+        this.eventosTeclado();
+    }),
+    //Asignación de eventos al teclado de la calculadora
     eventosTeclado: function(){
+        //Teclado numerico
         document.getElementById('0').addEventListener('click', function(){
             Calculadora.ingresaNumero('0');
         });
@@ -39,6 +40,20 @@ var Calculadora = {
         document.getElementById('9').addEventListener('click', function(){
             Calculadora.ingresaNumero('9');
         });
+        document.getElementById('punto').addEventListener('click',function(){
+            Calculadora.ingresaPunto();
+        });
+        document.getElementById('sign').addEventListener('click', function(){
+            Calculadora.ingresaSigno();
+        });
+        //Teclado de operaciones
+        //document.getElementById('mas');
+        //document.getElementById('menos');
+        //document.getElementById('por');
+        //document.getElementById('dividido');
+        //document.getElementById('igual');
+        //Teclado de otras opciones
+        //document.getElementById('on');
     },
     //Ingresar e imprimir el numero en el display
     ingresaNumero: function(valor){
@@ -46,19 +61,38 @@ var Calculadora = {
         if(this.valorDisplay.length < 8){
             //Verifica si el valor en el display es 0
             if(this.valorDisplay == '0'){
-                //Si el valor en el display y el valor enviado es 0 retorna
-                if(valor == '0'){
-                    return;
-                }
-                else{
-                    this.valorDisplay = valor;
-                    Calculadora.impPantalla(this.valorDisplay);
-                }
+                this.valorDisplay = '';
+                this.valorDisplay += valor;
             }
             else{
                 this.valorDisplay += valor;
-                Calculadora.impPantalla(this.valorDisplay);
             }
+            Calculadora.impPantalla(this.valorDisplay);
+        }
+    },
+    //Ingresar e imprimir el punto que indica decimal
+    ingresaPunto: function(){
+        //Verifica que la cadena no tenga un punto
+        if(this.valorDisplay.indexOf('.') == -1){
+            this.valorDisplay += '.';
+            Calculadora.impPantalla(this.valorDisplay);
+        }
+    },
+    //Cambia e imprime el signo en el numero
+    ingresaSigno: function(){
+        //Verifica que el numero sea diferente de 0
+        if(this.valorDisplay != '0'){
+            var aux;
+            //Verifica si el numero es negativo
+            if(this.valorDisplay.charAt(0) == '-'){
+                aux = this.valorDisplay.slice(1);
+            }
+            else{
+                aux = '-' + this.valorDisplay;
+            }
+            this.valorDisplay = '';
+            this.valorDisplay = aux;
+            Calculadora.impPantalla(this.valorDisplay);
         }
     },
     //Imprimir en el display
@@ -68,114 +102,6 @@ var Calculadora = {
 };
 Calculadora.init();
 /*Teclado Operaciones
-var teclaSuma = document.getElementById('mas');
-var teclaResta = document.getElementById('menos');
-var teclaMultiplicacion = document.getElementById('por');
-var teclaDivision = document.getElementById('dividido');
-var teclaIgual = document.getElementById('igual');
-//Teclado de otras opciones
-var teclaOn = document.getElementById('on');
-var teclaMasMenos = document.getElementById('sign');
-var teclaPunto = document.getElementById('punto');
-//Se añade una función para el evento click de la tecla 1
-tecla1.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '1';
-        impDisplay(numero);
-    }
-    else{
-        numero += '1';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 2
-tecla2.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '2';
-        impDisplay(numero);
-    }
-    else{
-        numero += '2';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 3
-tecla3.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '3';
-        impDisplay(numero);
-    }
-    else{
-        numero += '3';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 4
-tecla4.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '4';
-        impDisplay(numero);
-    }
-    else{
-        numero += '4';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 5
-tecla5.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '5';
-        impDisplay(numero);
-    }
-    else{
-        numero += '5';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 6
-tecla6.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '6';
-        impDisplay(numero);
-    }
-    else{
-        numero += '6';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 7
-tecla7.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '7';
-        impDisplay(numero);
-    }
-    else{
-        numero += '7';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 8
-tecla8.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '8';
-        impDisplay(numero);
-    }
-    else{
-        numero += '8';
-        impDisplay(numero);
-    }
-});
-//Se añade una función para el evento click de la tecla 9
-tecla9.addEventListener('click', function(){
-    if(numero == '0'){
-        numero = '9';
-        impDisplay(numero);
-    }
-    else{
-        numero += '9';
-        impDisplay(numero);
-    }
-});
 //Se añade la función para la suma que se ejecuta al hacer click en el boton correspondiente
 teclaSuma.addEventListener('click', function(){
     if(ctrlOp == false){
@@ -255,12 +181,6 @@ teclaOn.addEventListener('click', function(){
 });
 //Función que se ejecuta al hacer click en la tecla signo
 //Función que se ejecuta la hacer click sobre le boton punto
-teclaPunto.addEventListener('click', function(){
-    if(numero.indexOf('.') == -1){
-        numero += '.';
-        impDisplay(numero);
-    }
-});
 //Función para realizar el cálculo
 function Calculadora(op,num1,num2){
     switch(op){
