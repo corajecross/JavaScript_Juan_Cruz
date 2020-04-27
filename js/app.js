@@ -1,24 +1,73 @@
-//Variable de almacenamiento del numero, resultado y la operación
-var numero = '0';
-var resultado = '';
-var operacion = '';
-var vacio = '';
-//Variable de control si se tiene una operación pendiente
-var ctrlOp = false;
-//Display de la calculadora
-var display = document.getElementById('display');
-//Teclado Numérico
-var tecla0 = document.getElementById('0');
-var tecla1 = document.getElementById('1');
-var tecla2 = document.getElementById('2');
-var tecla3 = document.getElementById('3');
-var tecla4 = document.getElementById('4');
-var tecla5 = document.getElementById('5');
-var tecla6 = document.getElementById('6');
-var tecla7 = document.getElementById('7');
-var tecla8 = document.getElementById('8');
-var tecla9 = document.getElementById('9');
-//Teclado Operaciones
+//Objeto Calculadora
+var Calculadora = { 
+    init: (function(){
+        this.eventosTeclado();
+    }),
+    //Display de la calculadora
+    display: document.getElementById('display'),
+    //Numero en display
+    valorDisplay: '0',
+    //Teclado Numérico
+    eventosTeclado: function(){
+        document.getElementById('0').addEventListener('click', function(){
+            Calculadora.ingresaNumero('0');
+        });
+        document.getElementById('1').addEventListener('click', function(){
+            Calculadora.ingresaNumero('1');
+        });
+        document.getElementById('2').addEventListener('click', function(){
+            Calculadora.ingresaNumero('2');
+        });
+        document.getElementById('3').addEventListener('click', function(){
+            Calculadora.ingresaNumero('3');
+        });
+        document.getElementById('4').addEventListener('click', function(){
+            Calculadora.ingresaNumero('4');
+        });
+        document.getElementById('5').addEventListener('click', function(){
+            Calculadora.ingresaNumero('5');
+        });
+        document.getElementById('6').addEventListener('click', function(){
+            Calculadora.ingresaNumero('6');
+        });
+        document.getElementById('7').addEventListener('click', function(){
+            Calculadora.ingresaNumero('7');
+        });
+        document.getElementById('8').addEventListener('click', function(){
+            Calculadora.ingresaNumero('8');
+        });
+        document.getElementById('9').addEventListener('click', function(){
+            Calculadora.ingresaNumero('9');
+        });
+    },
+    //Ingresar e imprimir el numero en el display
+    ingresaNumero: function(valor){
+        //Verifica que el numero no tenga mas de 8 caracteres
+        if(this.valorDisplay.length < 8){
+            //Verifica si el valor en el display es 0
+            if(this.valorDisplay == '0'){
+                //Si el valor en el display y el valor enviado es 0 retorna
+                if(valor == '0'){
+                    return;
+                }
+                else{
+                    this.valorDisplay = valor;
+                    Calculadora.impPantalla(this.valorDisplay);
+                }
+            }
+            else{
+                this.valorDisplay += valor;
+                Calculadora.impPantalla(this.valorDisplay);
+            }
+        }
+    },
+    //Imprimir en el display
+    impPantalla: function(valor){
+        Calculadora.display.innerHTML = valor;
+    }
+};
+Calculadora.init();
+/*Teclado Operaciones
 var teclaSuma = document.getElementById('mas');
 var teclaResta = document.getElementById('menos');
 var teclaMultiplicacion = document.getElementById('por');
@@ -28,16 +77,6 @@ var teclaIgual = document.getElementById('igual');
 var teclaOn = document.getElementById('on');
 var teclaMasMenos = document.getElementById('sign');
 var teclaPunto = document.getElementById('punto');
-//Se añade una función para el evento click de la tecla 0
-tecla0.addEventListener('click', function(){
-    if(numero == '0'){
-        return;
-    }
-    else{
-        numero += '0';
-        impDisplay(numero);
-    }
-});
 //Se añade una función para el evento click de la tecla 1
 tecla1.addEventListener('click', function(){
     if(numero == '0'){
@@ -252,5 +291,5 @@ function impDisplay(num){
     else{
         display.innerHTML = num;
     }
-}
+}*/
 
