@@ -14,8 +14,57 @@ var Calculadora = {
     ctrlOp: false,
     //Inicio
     init: (function(){
+        this.asgEventosEfectoBotones('.tecla');
         this.eventosTeclado();
     }),
+    //Asignación de eventos para los efectos del teclado
+    asgEventosEfectoBotones: function(selector){
+        var x = document.querySelectorAll(selector);
+        for(var i=0; i<x.length; i++){
+            x[i].onmouseover = this.evOprimeBoton;
+            x[i].onmouseleave = this.evSueltaBoton;
+        }
+    },
+    //
+    evOprimeBoton: function(event){
+        Calculadora.oprimeBoton(event.target);
+    },
+    //
+    evSueltaBoton: function(event){
+        Calculadora.sueltaBoton(event.target);
+    },
+    //Efectos de los botones
+    oprimeBoton: function(elemento){
+        var x = elemento.id;
+        if(x == 'mas'){
+            elemento.style.width = "88%";
+            elemento.style.height = "98%";
+        }
+        else if (x == '1' || x == '2' || x == '3' || x == '0' || x == 'igual' || x == 'punto'){
+            elemento.style.width = "28%";
+            elemento.style.height = "62px";
+        }
+        else{
+            elemento.style.width = "21%";
+            elemento.style.height = "62px";
+        }
+    },
+    //
+    sueltaBoton: function(elemento){
+        var x = elemento.id;
+        if(x == 'mas'){
+            elemento.style.width = "90%";
+            elemento.style.height = "100%";
+        }
+        else if (x == '1' || x == '2' || x == '3' || x == '0' || x == 'igual' || x == 'punto'){
+            elemento.style.width = "29%";
+            elemento.style.height = "62.91px";
+        }
+        else{
+            elemento.style.width = "22%";
+            elemento.style.height = "62.91px";
+        }
+    },
     //Asignación de eventos al teclado de la calculadora
     eventosTeclado: function(){
         //Teclado numerico
