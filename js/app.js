@@ -2,8 +2,17 @@
 var Calculadora = { 
     //Display de la calculadora
     display: document.getElementById('display'),
-    //Numero en display
+    //Se almacena el número en  el display
     valorDisplay: '0',
+    //Variables donde se almacenan los con los que se van a operar
+    numero1: '0',
+    numero2: '0',
+    resultado: '0',
+    //Variable donde se almacena la operación a realizar
+    operacion: '',
+    //Variable donde se controla la operación
+    ctrlOp: false,
+    //Inicio
     init: (function(){
         this.eventosTeclado();
     }),
@@ -47,27 +56,39 @@ var Calculadora = {
             Calculadora.ingresaSigno();
         });
         //Teclado de operaciones
-        //document.getElementById('mas');
-        //document.getElementById('menos');
-        //document.getElementById('por');
-        //document.getElementById('dividido');
-        //document.getElementById('igual');
+        document.getElementById('mas').addEventListener('click', function(){
+            Calculadora.ingresaOperacion('suma');
+        });
+        document.getElementById('menos').addEventListener('click', function(){
+            Calculadora.ingresaOperacion('resta');
+        });
+        document.getElementById('por').addEventListener('click', function(){
+            Calculadora.ingresaOperacion('multiplicacion');
+        });
+        document.getElementById('dividido').addEventListener('click', function(){
+            Calculadora.ingresaOperacion('division');
+        });
+        document.getElementById('igual').addEventListener('click', function(){
+            Calculadora.botonIgual();
+        });
         //Teclado de otras opciones
-        //document.getElementById('on');
+        document.getElementById('on').addEventListener('click', function(){
+            Calculadora.limpiarPantalla();
+        });
     },
     //Ingresar e imprimir el numero en el display
     ingresaNumero: function(valor){
         //Verifica que el numero no tenga mas de 8 caracteres
         if(this.valorDisplay.length < 8){
             //Verifica si el valor en el display es 0
-            if(this.valorDisplay == '0'){
+            if(this.valorDisplay == '0' || this.valorDisplay == ''){
                 this.valorDisplay = '';
                 this.valorDisplay += valor;
             }
             else{
                 this.valorDisplay += valor;
             }
-            Calculadora.impPantalla(this.valorDisplay);
+            Calculadora.impPantalla();
         }
     },
     //Ingresar e imprimir el punto que indica decimal
@@ -75,7 +96,7 @@ var Calculadora = {
         //Verifica que la cadena no tenga un punto
         if(this.valorDisplay.indexOf('.') == -1){
             this.valorDisplay += '.';
-            Calculadora.impPantalla(this.valorDisplay);
+            Calculadora.impPantalla();
         }
     },
     //Cambia e imprime el signo en el numero
@@ -92,124 +113,69 @@ var Calculadora = {
             }
             this.valorDisplay = '';
             this.valorDisplay = aux;
-            Calculadora.impPantalla(this.valorDisplay);
+            Calculadora.impPantalla();
         }
     },
+    //Se ejecuta al oprimir un boton de operacion
+    ingresaOperacion: function(op){
+        if(this.ctrlOp == false){
+            this.numero1 = this.valorDisplay;
+            this.operacion = op;
+            this.ctrlOp = true;
+            this.valorDisplay = '';
+        }
+        else{
+            this.numero2 = this.valorDisplay;
+            Calculadora.calcularResultado(this.operacion,this.numero1,this.numero2);
+            this.operacion = op;
+            this.numero1 = this.resultado
+            this.valorDisplay = '';
+        }
+        Calculadora.impPantalla();
+    },
+    //Realiza la operacion correspondiente
+    calcularResultado: function(op,num1,num2){
+        switch(op){
+            case 'suma':
+                this.resultado = parseFloat(num1) + parseFloat(num2);
+                this.resultado.toString();
+                break;
+            case 'resta':
+                this.resultado = parseFloat(num1) - parseFloat(num2);
+                this.resultado.toString();
+                break;
+            case 'multiplicacion':
+                this.resultado = parseFloat(num1) * parseFloat(num2);
+                this.resultado.toString();
+                break;
+            case 'division':
+                this.resultado = parseFloat(num1) / parseFloat(num2);
+                this.resultado.toString();
+                break;
+        }
+    },
+    //Función para el boton igual
+    botonIgual: function(){
+        this.numero2 = this.valorDisplay;
+        Calculadora.calcularResultado(this.operacion, this.numero1, this.numero2);
+        this.ctrlOp = false;
+        this.numero1 = this.resultado;
+        this.valorDisplay = this.resultado;
+        Calculadora.impPantalla();
+    },
+    //Limpiar pantalla
+    limpiarPantalla: function(){
+        this.valorDisplay = '0';
+        this.numero1 = '0';
+        this.numero2 = '0';
+        this.resultado = '0';
+        this.operacion = '';
+        this.ctrlOp = false;
+        Calculadora.impPantalla();
+    },
     //Imprimir en el display
-    impPantalla: function(valor){
-        Calculadora.display.innerHTML = valor;
+    impPantalla: function(){
+        Calculadora.display.innerHTML = this.valorDisplay;
     }
 };
 Calculadora.init();
-/*Teclado Operaciones
-//Se añade la función para la suma que se ejecuta al hacer click en el boton correspondiente
-teclaSuma.addEventListener('click', function(){
-    if(ctrlOp == false){
-        resultado = numero;
-        operacion = 'suma';
-        ctrlOp = true;
-        numero = '0';
-        impDisplay(vacio);
-    }
-    else{
-        Calculadora(operacion,resultado,numero);
-        operacion = 'suma';
-        numero = '0'
-        impDisplay(vacio);
-    }   
-});
-//Se añade la función para la resta que se ejecuta al hacer click en el boton correspondiente
-teclaResta.addEventListener('click', function(){
-    if(ctrlOp == false){
-        resultado = numero;
-        operacion = 'resta';
-        ctrlOp = true;
-        numero = '0';
-        impDisplay(vacio);
-    }
-    else{
-        Calculadora(operacion,resultado,numero);
-        operacion = 'resta';
-        numero = '0'
-        impDisplay(vacio);
-    }   
-});
-//Se añade la función para la multipliación que se ejecuta al hacer click en el boton correspondiente
-teclaMultiplicacion.addEventListener('click', function(){
-    if(ctrlOp == false){
-        resultado = numero;
-        operacion = 'multiplicacion';
-        ctrlOp = true;
-        numero = '0';
-        impDisplay(vacio);
-    }
-    else{
-        Calculadora(operacion,resultado,numero);
-        operacion = 'multiplicacion';
-        numero = '0'
-        impDisplay(vacio);
-    }   
-});
-//Se añade la función para la division que se ejecuta al hacer click en el boton correspondiente
-teclaDivision.addEventListener('click', function(){
-    if(ctrlOp == false){
-        resultado = numero;
-        operacion = 'division';
-        ctrlOp = true;
-        numero = '0';
-        impDisplay(vacio);
-    }
-    else{
-        Calculadora(operacion,resultado,numero);
-        operacion = 'division';
-        numero = '0'
-        impDisplay(vacio);
-    }   
-});
-//Función que se ejecuta al hacer click en el boton de igual
-teclaIgual.addEventListener('click', function(){
-    Calculadora(operacion,resultado,numero);
-    impDisplay(resultado);
-});
-//Función que se ejecuta al hacer click en la tecla On
-teclaOn.addEventListener('click', function(){
-    numero = '0';
-    resultado = '';
-    operacion = '';
-    ctrlOp = false;
-    impDisplay(numero);
-});
-//Función que se ejecuta al hacer click en la tecla signo
-//Función que se ejecuta la hacer click sobre le boton punto
-//Función para realizar el cálculo
-function Calculadora(op,num1,num2){
-    switch(op){
-        case 'suma':
-            resultado = parseFloat(num1) + parseFloat(num2);
-            resultado.toString();
-            break;
-        case 'resta':
-            resultado = parseFloat(num1) - parseFloat(num2);
-            resultado.toString();
-            break;
-        case 'multiplicacion':
-            resultado = parseFloat(num1) * parseFloat(num2);
-            resultado.toString();
-            break;
-        case 'division':
-            resultado = parseFloat(num1) / parseFloat(num2);
-            resultado.toString();
-            break;
-    }
-}
-//Función para imprimir en el display
-function impDisplay(num){
-    if(num.length > 8){
-        var numImp = num.substr(0,7);
-        display.innerHTML = numImp;
-    }
-    else{
-        display.innerHTML = num;
-    }
-}*/
-
